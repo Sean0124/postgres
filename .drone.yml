@@ -2,9 +2,6 @@ kind: pipeline
 type: kubernetes
 name: postgres 
 
-metadata:
-  namespace: drone
-
 steps:
   - name: docker-build-push-backend
     image: registry.cloudclusters.net/cloudclusters/plugins-docker:linux-amd64
