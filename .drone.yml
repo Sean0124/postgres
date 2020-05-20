@@ -1,0 +1,33 @@
+kind: pipeline
+type: kubernetes
+name: postgres 
+
+metadata:
+  namespace: drone
+
+steps:
+  - name: docker-build-push-backend
+    image: registry.cloudclusters.net/cloudclusters/plugins-docker:linux-amd64
+    pull: always
+    privileged: true
+    settings:
+      repo: registry.cloudclusters.net/cloudclusters/postgrestestci
+      registry: registry.cloudclusters.net
+      debug: true
+      pvtag: true
+      autotag: false
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password      
+    volumes:
+      - name: dockercache
+        path: /var/lib/docker
+        
+node_selector:
+  kubernetes.io/hostname: efk
+
+volumes:
+- name: dockercache
+  host:
+    path: /tmp/docker/${DRONE_REPO}/${DRONE_BRANCH}
